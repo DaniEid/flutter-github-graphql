@@ -105,9 +105,11 @@ void mainCubit() {
       act: (cubit) async {
         await cubit.getDate();
 
-        final lastIssue = cubit.pageInfo!.endCursor;
+        if (cubit.pageInfo != null) {
+          final lastIssue = cubit.pageInfo!.endCursor;
 
-        await cubit.getDate(lastIssue: lastIssue);
+          await cubit.getDate(lastIssue: lastIssue);
+        }
       },
       verify: (cubit) => cubit.issues.isNotEmpty && cubit.issues.length == 20,
     );
