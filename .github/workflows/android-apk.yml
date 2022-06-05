@@ -1,0 +1,44 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Dart
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '2.10.0'
+          channel: 'stable'
+
+      - name: Install dependencies
+        run: flutter pub get
+        
+      - name: start build runner to generate
+        run: flutter packages pub run build_runner build --delete-conflicting-outputs
+        
+
+      - name: Run tests
+        run: flutter test
+        
+        
+      - name: build Apk
+        run: flutter build apk --release
+        
+      - name: upload artifact to Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{secrets.FIREBASE_APP_ID}}
+          token: ${{secrets.FIREBASE_TOKEN}}
+          groups: testers
+          file: app/build/outputs/apk/release/app-release.apk
