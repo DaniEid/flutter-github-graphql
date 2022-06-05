@@ -22,6 +22,12 @@ jobs:
         uses: actions/setup-java@v1
         with:
            java-version: 1.8
+     
+      - name: set Java
+        uses: actions/setup-java@v2
+        with:
+         distribution: 'zulu'
+         java-version: '11'
       
       - uses: subosito/flutter-action@v1
         with:
@@ -48,4 +54,4 @@ jobs:
           appId: ${{secrets.FIREBASE_APP_ID}}
           token: ${{secrets.FIREBASE_TOKEN}}
           groups: testers
-          file: app/build/outputs/apk/release/app-release.apk
+          file: build/app/outputs/apk/release/app-release.apk
